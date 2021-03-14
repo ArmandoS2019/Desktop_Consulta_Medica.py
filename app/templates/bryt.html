@@ -1,0 +1,27 @@
+
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython_stdlib.js"></script>
+    </head>
+    <body onload="brython()">
+        <script type="text/python">
+            from browser import ajax, bind, document
+            
+            def upload_ok(req):
+                print("all right")
+            
+            @bind("#upload", "click")
+            def uploadfiles(event):
+                for f in document["choosefiles"].files:
+                    ajax.file_upload("/cgi-bin/savefile.py", f,
+                        oncomplete=upload_ok)
+        </script>
+            
+            <form>
+                <input id="choosefiles" type="file" multiple="multiple" />
+            </form>
+            <button id="upload">Upload</button>
+       
+    </body>
+</html>

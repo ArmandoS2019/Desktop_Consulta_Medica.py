@@ -1,0 +1,231 @@
+                      <form action="" method="POST">
+                                {{ form_prescription.csrf_token() }} 
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        {{ render_field(form_prescription.prescription_date,class="form-control") }}
+                                    </div>
+                                </div>
+                                  
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+  
+                                        {{ render_field(form_prescription.prescription_1,class="form-control form-control-sm", placeholder='1') }}
+                                        {{ render_field(form_prescription.prescription_2,class="form-control form-control-sm", placeholder='2') }}
+                                        {{ render_field(form_prescription.prescription_3,class="form-control form-control-sm", placeholder='3') }}
+                                        {{ render_field(form_prescription.prescription_4,class="form-control form-control-sm", placeholder='4') }}
+                                        {{ render_field(form_prescription.prescription_5,class="form-control form-control-sm", placeholder='5') }}
+                                        {{ render_field(form_prescription.prescription_6,class="form-control form-control-sm", placeholder='6') }}
+                                        
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div> 
+                            </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            
+            <!-- Modal MEDIC CONSULT-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pacientes</h5>
+                                  <!-- Button Modal -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                {{ form_consult.csrf_token() }} 
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.systolic,class="form-control", placeholder='Sistólica') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.diastolic,class="form-control", placeholder='Diastólica') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.pulsations,class="form-control", placeholder='Pulsaciones') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.respiratory_rhythm,class="form-control", placeholder='Ritmo respiratorio') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.temperature,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.weight,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.body_mass_index,class="form-control", placeholder='IMC') }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.glycemic,class="form-control", placeholder='Glicemia') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.comment,class="form-control", placeholder='Comentario') }}
+                                    </div>     
+                                   
+                                </div>
+
+                              
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>        
+                            </form>
+                          </div>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+
+            <!-- Modal MEDIC RECETA-->
+            <div class="modal fade" id="medicRecetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Receta No. XXXX </h5>
+                                  <!-- Button Modal -->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <form action="{{ url_for('evaluations') }}" method="POST">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_prescription.prescription_date,class="form-control form-control-sm") }}
+                                        {{ render_field(form_prescription.prescription_1,class="form-control form-control-sm", placeholder='1') }}
+                                        {{ render_field(form_prescription.prescription_2,class="form-control form-control-sm", placeholder='2') }}
+                                        {{ render_field(form_prescription.prescription_3,class="form-control form-control-sm", placeholder='3') }}
+                                        {{ render_field(form_prescription.prescription_4,class="form-control form-control-sm", placeholder='4') }}
+                                        {{ render_field(form_prescription.prescription_5,class="form-control form-control-sm", placeholder='5') }}
+                                        {{ render_field(form_prescription.prescription_6,class="form-control form-control-sm", placeholder='6') }}
+                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    {{ render_field(form_prescription.send,class="btn btn-primary") }}
+                                </div>        
+                            </form>
+                          </div>
+                    </div>
+                    
+                </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Large modal -->
+            <div class="modal fade bd-example-modal-lg" id="myModalNotes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="modal-header">
+                            <h5 id="exampleModalLabel" class="modal-title">Formulario Administrador</h5>
+                            <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
+                
+                            </div>
+
+                            <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                {{ form_consult.csrf_token() }} 
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.systolic,class="form-control", placeholder='Sistólica') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.diastolic,class="form-control", placeholder='Diastólica') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.pulsations,class="form-control", placeholder='Pulsaciones') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.respiratory_rhythm,class="form-control", placeholder='Ritmo respiratorio') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.temperature,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.weight,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.body_mass_index,class="form-control", placeholder='IMC') }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.glycemic,class="form-control", placeholder='Glicemia') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.comment,class="form-control", placeholder='Comentario') }}
+                                    </div>     
+                                
+                                </div>
+
+                            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>        
+                            </form>
+                            
+                            </div>
+                            
+                
+                
+                            
+                    </div>
+                </div>
+                </div>
+                
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+                </div>

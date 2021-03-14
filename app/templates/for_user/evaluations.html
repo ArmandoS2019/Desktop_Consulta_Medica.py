@@ -1,0 +1,861 @@
+{% extends "base.html" %}
+
+{% from "_render_field.html" import render_field %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>
+        {% block title %}
+        | pacients 
+        {% endblock %}
+    </title>
+
+</head>
+<body>
+
+    {% block content_gray %}
+
+      <section class="forms">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h4 class="badge badge-info">PACIENTE: {{ consults_tbl['pacient'].firstname_patient }} {{ consults_tbl['pacient'].lastname_patient }} </h4>
+                </div>
+
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXTABLE ONE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+                <div class="card-body">
+                    <table id="vehicules" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <button type="button" class="btn badge-danger fa fa-heartbeat" data-toggle="modal" data-target="#myModalNotes">
+                                        Agregar nueva consulta
+                                    </button>
+                                </th> 
+                                <th>
+                                    Comentario
+                                </th>
+                               
+                                <th>
+                                    Acciones
+                                </th>
+                            </tr>
+                           
+                        </thead>
+                        <tbody>
+                                {% for consult in consults_tbl['consults_pacient_added'] %}
+                                    <tr>
+                                        <td>           
+                                            <i class="fa fa-calendar">  {{ consult.created_consult.strftime("%d %B, %Y") }}</i> 
+                                            <br>Sistólica <b class="text-blue">{{ consult.systolic }}</b>
+                                            <br>Diastólica <b class="text-red">{{ consult.diastolic }}</b>
+                                            <br>Peso <b>{{ consult.weight }}</b>
+                                                
+                                        </td>
+                                        <td>
+                                            {{ consult.comment }}
+                                        </td>
+                                       
+                                        <td>
+                                            <div class="dropdown">
+                                                <span class="caret"></span></button>
+                                                <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                                <ul class="dropdown-menu">
+                                                    <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                    <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                    <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+  
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>
+                                    <button type="button" class="btn badge-danger fa fa-heartbeat" data-toggle="modal" data-target="#myModalNotes">
+                                        Agregar nueva consulta
+                                    </button>
+                                </th> 
+                                <th>
+                                    Comentario
+                                </th>
+                               
+                                <th>
+                                    Acciones
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+              </div>
+            </div>
+
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXTABLE TWO XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+                        <div class="col-lg-5">
+                            
+                          <div class="row responsive">
+                              <div class="column">
+                                    <!-- Counts Section -->
+                                    <table id="vehicules" class="table table-sm table-primary">
+                                      <thead>
+                                          <tr>
+                                              <th>
+                                                  <button type="button" class="btn badge-info fa fa-file-text" data-toggle="modal" data-target="#myModalIndication">
+                                                      Agregar indicación 
+                                                  </button>
+                                                  {{ consults_tbl['consult_pacient_count'] }}
+                                              </th> 
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                              {% for consult in consults_tbl['consults_pacient_added'] %}
+                                                  <tr>
+                             
+              
+                                                      <td>
+                                                          
+                                                          <div class="dropdown">
+                                                              <span class="caret"></span></button>
+                                                              <i class="fa fa-file-text">  {{ consult.created_consult.strftime("%d %B, %Y") }}</i> 
+                                                              <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                                              <ul class="dropdown-menu">
+                                                                  <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                                  <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                  <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                      </td>
+              
+                                                     
+                                                  </tr>
+                                              {% endfor %}
+                
+                                      </tbody>
+                                      <tfoot>
+                                          <tr>
+                                              <th>
+                                                  <button type="button" class="btn badge-info fa fa-file-text" data-toggle="modal" data-target="#exampleModal">
+                                                      Agregar indicación
+                                                  </button>
+                                              </th> 
+                                          </tr>
+                                      </tfoot>
+                                  </table>
+                              </div>
+                    </ul>
+                  </li>
+<!-- XXXXXXXXXXXXXXXXXXXXXXXXXXTABLE TRHEE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+
+                    <div class="col-lg-5">
+                        
+                      <div class="row responsive">
+                          <div class="column">
+                                <!-- Counts Section -->
+                                <table id="vehicules" class="table table-sm table-danger">
+                                  <thead>
+                                      <tr>
+                                          <th>
+                                              <button type="button" class="btn badge-success fa fa-medkit" data-toggle="modal" data-target="#myModalConsult">
+                                                  Receta
+                                              </button>
+                                              {{ consults_tbl['consult_pacient_count'] }}
+                                          </th> 
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                          {% for indication in consults_tbl['consults_prescriptions'] %}
+                                              <tr>
+                         
+          
+                                                  <td>
+                                                      
+                                                      <div class="dropdown">
+                                                          <span class="caret"></span></button>
+                                                          <i class="fa fa-file-text">  {{ indication.created_consult.strftime("%d %B, %Y") }}</i> 
+                                                          <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                                          <ul class="dropdown-menu">
+                                                              <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                              <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                              <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                  </td>
+          
+                                                 
+                                              </tr>
+                                          {% endfor %}
+            
+                                  </tbody>
+                                  <tfoot>
+                                      <tr>
+                                          <th>
+                                              <button type="button" class="btn badge-success fa fa-medkit" data-toggle="modal" data-target="#exampleModal">
+                                                Receta
+                                              </button>
+                                          </th> 
+                                      </tr>
+                                  </tfoot>
+                              </table>
+                          </div>
+                </ul>
+              </li>
+            </div>
+
+                
+
+            <!-- Large modal MEDIC CONSULT////////////////////////////-->
+            <div class="modal fade bd-example-modal-lg" id="myModalNotes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                            No. 0000-21
+                        <div class="modal-header">
+                            <h3 class="modal-title badge badge-danger">CONSULTA MÉDICA</h3> <br>
+                            <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
+                
+                            </div>
+
+                            <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                                {{ form_consult.csrf_token() }} 
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.systolic,class="form-control", placeholder='Sistólica') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.diastolic,class="form-control", placeholder='Diastólica') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.pulsations,class="form-control", placeholder='Pulsaciones') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.respiratory_rhythm,class="form-control", placeholder='Ritmo respiratorio') }}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.temperature,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.height,class="form-control", placeholder='Temperatura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.weight,class="form-control", placeholder='Altura') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.body_mass_index,class="form-control", placeholder='IMC') }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.glycemic,class="form-control", placeholder='Glicemia') }}
+                                    </div>     
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_consult.comment,class="form-control", placeholder='Comentario') }}
+                                    </div>     
+                                
+                                </div>
+
+                            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>        
+                            </form>
+                            
+                            </div>
+                            
+                
+                
+                            
+                    </div>
+                </div>
+                </div>
+                
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+                </div>
+
+                            <!-- Large modal  INDICATION -->
+            <div class="modal fade bd-example-modal-xl" id="myModalIndication" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        No. 0000-21
+                        <div class="modal-header">
+                            <h3 class="modal-title badge badge-info">FECHA INDICACIÓN</h3> <br>
+                            {{ render_field(form_indication.indications_date,class="form-control") }}  
+                             
+                            <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
+                
+                            </div>
+
+                            <form action="" method="POST">
+                                {{ form_indication.csrf_token() }} 
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <div>  
+                                            <li><a href="#hemodropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-heartbeat" aria-hidden="true"></i> HEMATOLOGIA </a>
+                                                <ul id="hemodropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.hemograma,id="list-1", class="form-check") }}
+                                                        <label for="list-1"> Hemograma</label>
+                                                    </li>
+                                                    
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.conteo_de_eosinofilos,id="list-2",class="form-check") }}
+                                                        <label for="list-2"> Conteo de eosinofilos</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.conteo_de_plaquetas,id="list-3",class="form-check") }}
+                                                        <label for="list-3"> Conteo de plaquetas</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.conteo_de_reticulositos,id="list-4",class="form-check") }}
+                                                        <label for="list-4"> Conteo de reticulositos</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.in_de_hemolozoarios,id="list-5",class="form-check") }}
+                                                        <label for="list-5"> In de hemolozoarios</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.inv_de_celulas_le,id="list-6",class="form-check") }}
+                                                        <label for="list-6"> Inv de celulas_le</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.eritroretroalimentacion,id="list-7",class="form-check") }}
+                                                        <label for="list-7"> eritroretroalimentacion</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
+                                            
+                                              <li><a href="#orinadropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-tint" aria-hidden="true"></i> ORINA </a>
+                                                <ul id="orinadropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.uroanalisis_completo,id="list-8", class="form-check") }}
+                                                        <label for="list-8"> Uroanalisis completo</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.dosificacion_de_proteinas_24hs,id="list-9", class="form-check") }}
+                                                        <label for="list-9"> Dosificacion de proteinas 24hs</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.dosificacion_de_creatina_24hs,id="list-10", class="form-check") }}
+                                                        <label for="list-10"> Dosificacion de creatina 24hs</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.acvanilmondelico_una,id="list-11", class="form-check") }}
+                                                        <label for="list-11"> Acvanilmondelico una</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.albumea,id="list-12", class="form-check") }}
+                                                        <label for="list-12"> Albumea</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.prueba_de_embarazo,id="list-13", class="form-check") }}
+                                                        <label for="list-13"> Prueba de embarazo</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.diecisiete_ceto,id="list-14", class="form-check") }}
+                                                        <label for="list-14"> Diecisiete ceto</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.diecisiete_oh,id="list-15", class="form-check") }}
+                                                        <label for="list-15"> Diecisiete oh</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
+                                              
+                                              <li><a href="#hecesdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-cloud" aria-hidden="true"></i> HECES </a>
+                                                <ul id="hecesdropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.estudio_de_digestion,id="list-16", class="form-check") }}
+                                                        <label for="list-16"> Estudio de digestion completo</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.inv_de_hermintos_protozos,id="list-17", class="form-check") }}
+                                                        <label for="list-17"> Inv de hermintos protozos</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.inv_de_sangre_oculta,id="list-18", class="form-check") }}
+                                                        <label for="list-18"> Inv de sangre oculta</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.inv_de_amebas_enheces_fecales,id="list-ame", class="form-check") }}
+                                                        <label for="list-ame"> Inv de amebas en heces fecales</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <li><a href="#quimicbloodropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-thermometer-quarter" aria-hidden="true"></i> QUIMICA SANGUINEA </a>
+                                            <ul id="quimicbloodropdownDropdown" class="collapse list-unstyled ">
+                                              
+                                            
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.glicemia_basal,id="list-basal", class="form-check") }}
+                                                <label for="list-basal"> Glicemia basal</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.glicemiapp,id="list-gli", class="form-check") }}
+                                                <label for="list-gli"> Glicemiapp</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.curva_tolerancia_glucosa_hs,id="list-glu", class="form-check") }}
+                                                <label for="list-glu"> Curva tolerancia glucosa hs</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.hb_glucosilada,id="list-hb", class="form-check") }}
+                                                <label for="list-hb"> Hb glucosilada</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.bun,id="list-bun", class="form-check") }}
+                                                <label for="list-bun"> Bun</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.creatina,id="list-crea", class="form-check") }}
+                                                <label for="list-crea"> Creatina</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.colesterol,id="list-cole", class="form-check") }}
+                                                <label for="list-cole"> Colesterol</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.colesterol_idl_ldl,id="list-idl", class="form-check") }}
+                                                <label for="list-idl"> Colesterol idl ldl</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.trigliceridos_s,id="list-tri", class="form-check") }}
+                                                <label for="list-tri"> Trigliceridos s</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.lipidos_totales,id="list-di", class="form-check") }}
+                                                <label for="list-di"> Dipidos_totales s</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.cloruros,id="list-tr", class="form-check") }}
+                                                <label for="list-tr"> Cloruros s</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.sodio,id="list-sodio", class="form-check") }}
+                                                <label for="list-sodio"> Sodio</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.co2,id="list-co2", class="form-check") }}
+                                                <label for="list-co2"> Co2</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.calcio,id="list-calcio", class="form-check") }}
+                                                <label for="list-calcio"> Calcio</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.fosforo_inorganico,id="list-fos", class="form-check") }}
+                                                <label for="list-fos"> Fosforo inorgánico</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.magnecio,id="list-mg", class="form-check") }}
+                                                <label for="list-mg"> Magnesio</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.acido_urico,id="list-au", class="form-check") }}
+                                                <label for="list-au"> Ácido úrico</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.sgpt,id="list-sgpt", class="form-check") }}
+                                                <label for="list-sgpt"> Sgpt</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.fosfolosa_alcalina,id="list-fa", class="form-check") }}
+                                                <label for="list-fa"> Fosfolosa alcalina</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.gammaglutami_t_ggt,id="list-gt", class="form-check") }}
+                                                <label for="list-gt"> Gammaglutami t ggt</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.bilirrubina,id="list-bili", class="form-check") }}
+                                                <label for="list-bili"> Bilirrubina</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.proteinas_totales,id="list-pro", class="form-check") }}
+                                                <label for="list-pro"> Proteinas totales</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.fructo_camina,id="list-fru", class="form-check") }}
+                                                <label for="list-fru"> fructo_camina</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.amilasa,id="list-ami", class="form-check") }}
+                                                <label for="list-ami"> Amilasa</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.laptosa,id="list-lap", class="form-check") }}
+                                                <label for="list-lap"> Laptosa</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.dosificacion_hierro_senico,id="list-hs", class="form-check") }}
+                                                <label for="list-hs"> Dosificacion hierro senico</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.amonio,id="list-amo", class="form-check") }}
+                                                <label for="list-amo"> Amonio</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.ck_total,id="list-ck_total", class="form-check") }}
+                                                <label for="list-ck_total"> Ck total</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.ck_mb,id="list-ck_mb", class="form-check") }}
+                                                <label for="list-ck_mb"> Ck mb</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.depuracion_creatinina_endogena,id="list-dpc", class="form-check") }}
+                                                <label for="list-dpc"> Depuracion creatinina endogena</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.proteinas_oxina_24hr,id="list-po", class="form-check") }}
+                                                <label for="list-po"> Proteinas oxina 24hr</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.creatininas_orina24hs,id="list-coo", class="form-check") }}
+                                                <label for="list-coo"> Creatininas orina24hss</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.lilia,id="list-lilia", class="form-check") }}
+                                                <label for="list-lilia"> Lilia</label>
+                                            </li>
+                             
+                                            </ul>
+                                          </li>
+
+                                  
+                                    </div> 
+                                    <div class="form-row col-md-3">
+                                        <div class="form-group">
+                                            <li><a href="#serologidcdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-eyedropper" aria-hidden="true"></i> SEROLOGIA </a>
+                                                <ul id="serologidcdropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.antiestreptotilina_o_aso,id="list-al", class="form-check") }}
+                                                        <label for="list-al"> Antiestreptotilina o aso</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.factor_reumatoideo,id="list-fre", class="form-check") }}
+                                                        <label for="list-fre"> Factor reumatoideo</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.anticuerpos_heterotico_monotest,id="list-ahm", class="form-check") }}
+                                                        <label for="list-ahm"> Anticuerpos heterotico monotest</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.proteina_c_reactiva,id="list-pcr", class="form-check") }}
+                                                        <label for="list-pcr"> Proteina c reactiva</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.stretozyme,id="list-Stretozyme", class="form-check") }}
+                                                        <label for="list-Stretozyme"> Stretozyme</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.anti_dna,id="list-anti_dna", class="form-check") }}
+                                                        <label for="list-anti_dna"> Anti_dna</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.vdrl,id="list-vdrl", class="form-check") }}
+                                                        <label for="list-vdrl"> vdrl</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.fta_abs,id="list-fta_abs", class="form-check") }}
+                                                        <label for="list-fta_abs"> fta_abs</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.anticuerpos_antinucleares_ana,id="list-aa", class="form-check") }}
+                                                        <label for="list-aa"> Anticuerpos antinucleares ana</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.anticuerpos_antimusculo_liso,id="list-aal", class="form-check") }}
+                                                        <label for="list-aal"> Anticuerpos antimusculo liso</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.tipificacion_sanguinea,id="list-tp", class="form-check") }}
+                                                        <label for="list-tp"> Tipificacion sanguinea</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.test_coommlas_directo,id="list-tpc", class="form-check") }}
+                                                        <label for="list-tpc"> Test coommlas directo</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.test_control_indirecto,id="list-tpo", class="form-check") }}
+                                                        <label for="list-tpo"> Test control indirecto</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.citoglobulinas,id="list-tpoc", class="form-check") }}
+                                                        <label for="list-tpoc"> Citoglobulinas</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.prueba_embarazo_suero,id="list-tpob", class="form-check") }}
+                                                        <label for="list-tpob"> Prueba embarazo suero</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
+                                            
+                                              <li><a href="#hormonasdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-braille" aria-hidden="true"></i> HORMONAS </a>
+                                                <ul id="hormonasdropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t3,id="list-t3", class="form-check") }}
+                                                        <label for="list-t3"> T3</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t4,id="list-t4", class="form-check") }}
+                                                        <label for="list-t4"> T4</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.tsh,id="list-tsh", class="form-check") }}
+                                                        <label for="list-tsh"> Tsh</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t4_libre,id="list-t4_libre", class="form-check") }}
+                                                        <label for="list-t4_libre"> T4_libre</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
+                                        </div>
+                                        
+                            
+
+                                    </div>
+                                    <div class="form-group">
+                                        <li><a href="#micelaneosdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-thermometer-quarter" aria-hidden="true"></i> MICELANEOS </a>
+                                            <ul id="micelaneosdropdownDropdown" class="collapse list-unstyled ">
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.espermalograma,id="list-spm", class="form-check") }}
+                                                    <label for="list-spm"> Espermalograma</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hiv,id="list-anti_hiv", class="form-check") }}
+                                                    <label for="list-anti_hiv"> Anti hiv</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hcv,id="list-anti_hcv", class="form-check") }}
+                                                    <label for="list-anti_hcv"> Anti hcv</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.antigeno_australiano_hbshb,id="list-aahi", class="form-check") }}
+                                                    <label for="list-aahi"> Antigeno australiano hbshb</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.hbs_ag,id="list-hbs_ag", class="form-check") }}
+                                                    <label for="list-hbs_ag"> Hbs_ag</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.hbe_ag,id="list-hbe_ag", class="form-check") }}
+                                                    <label for="list-hbe_ag"> Hbe_ag</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hav_iggigm,id="list-athi", class="form-check") }}
+                                                    <label for="list-athi"> anti hav iggigm</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hbe,id="list-anti_hbe", class="form-check") }}
+                                                    <label for="list-anti_hbe"> Anti hbe</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hbs,id="list-anti_hbs", class="form-check") }}
+                                                    <label for="list-anti_hbs"> Anti hbs</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.anti_hbc_core,id="list-anti_hbc_core", class="form-check") }}
+                                                    <label for="list-anti_hbc_core"> Anti hbc core</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.alfa_feto_proteinas,id="list-afpp", class="form-check") }}
+                                                    <label for="list-afpp"> Alfa feto proteinas</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.clamidia,id="list-clamidia", class="form-check") }}
+                                                    <label for="list-clamidia"> Clamidia</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.rubello_igl_igm,id="list-rii", class="form-check") }}
+                                                    <label for="list-rii"> Rubello igl igm</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.antiocodiolipinas,id="list-antiocodiolipinas", class="form-check") }}
+                                                    <label for="list-antiocodiolipinas"> antiocodiolipinas</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.herpes_uno_dos,id="list-herpes_uno_dos", class="form-check") }}
+                                                    <label for="list-herpes_uno_dos"> herpes_uno_dos</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ameba_suero,id="list-ameba_suero", class="form-check") }}
+                                                    <label for="list-ameba_suero"> ameba_suero</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.cea,id="list-cea", class="form-check") }}
+                                                    <label for="list-cea"> cea</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ca125,id="list-ca125", class="form-check") }}
+                                                    <label for="list-ca125"> ca125</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ca15_3,id="list-ca15_3", class="form-check") }}
+                                                    <label for="list-ca15_3"> ca15_3</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.toxoplasmosis_igg_igm,id="toxoplasmosis_igg_igm", class="form-check") }}
+                                                    <label for="toxoplasmosis_igg_igm"> toxoplasmosis_igg_igm</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.inmunoglubolinas_iga_ic_igm,id="inmunoglubolinas_iga_ic_igmi", class="form-check") }}
+                                                    <label for="inmunoglubolinas_iga_ic_igm"> inmunoglubolinas_iga_ic_igmm</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ige,id="ige", class="form-check") }}
+                                                    <label for="ige"> ige</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.fenilina,id="fenilina", class="form-check") }}
+                                                    <label for="fenilina"> fenilina</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.hilicobacter_pylo,id="hilicobacter_pylo", class="form-check") }}
+                                                    <label for="hilicobacter_pylo"> hilicobacter_pylo</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.vit_b12,id="vit_b12", class="form-check") }}
+                                                    <label for="vit_b12"> vit_b12</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ac_folico,id="ac_folico", class="form-check") }}
+                                                    <label for="ac_folico"> ac_folico</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.psa,id="psa", class="form-check") }}
+                                                    <label for="psa"> psa</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.hemocultivo,id="hemocultivo", class="form-check") }}
+                                                    <label for="hemocultivo"> hemocultivo</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.urocultivo,id="urocultivo", class="form-check") }}
+                                                    <label for="urocultivo"> urocultivo</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.coprocultivo,id="coprocultivo", class="form-check") }}
+                                                    <label for="coprocultivo"> coprocultivo</label>
+                                                </li>
+                                            </ul>
+                                          </li>
+                                    </div>
+                                </div> 
+                                </div>  
+                               
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>        
+                            </form>
+                            
+                            </div>
+                            
+                
+                
+                            
+                    </div>
+                </div>
+                </div>
+                
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+                </div>
+
+                
+                            <!-- Large modal  PRESCRIPTION -->
+            <div class="modal fade bd-example-modal-lg" id="myModalConsult" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        No. 0000-21
+                        <div class="modal-header">
+                            <h3 class="modal-title badge badge-success">RECETA MÉDICA</h3> <br>
+                            <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
+                
+                            </div>
+
+                            <form action="" method="POST">
+                                {{ form_prescription.csrf_token() }} 
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        
+                                        {{ render_field(form_prescription.prescription_date,class="form-control form-control-sm") }}
+                                    </div>  
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_prescription.prescription_1,class="form-control form-control-sm", placeholder='1') }}
+                                        {{ render_field(form_prescription.prescription_2,class="form-control form-control-sm", placeholder='2') }}
+                                        {{ render_field(form_prescription.prescription_3,class="form-control form-control-sm", placeholder='3') }}
+                                        {{ render_field(form_prescription.prescription_4,class="form-control form-control-sm", placeholder='4') }}
+                                        {{ render_field(form_prescription.prescription_5,class="form-control form-control-sm", placeholder='5') }}
+                                        {{ render_field(form_prescription.prescription_6,class="form-control form-control-sm", placeholder='6') }}
+                                    </div>  
+                    
+                                    <div class="form-group col-md-4">
+                                        {{ render_field(form_prescription.prescription_7,class="form-control form-control-sm", placeholder='7') }}
+                                        {{ render_field(form_prescription.prescription_8,class="form-control form-control-sm", placeholder='8') }}
+                                        {{ render_field(form_prescription.prescription_9,class="form-control form-control-sm", placeholder='9') }}
+                                        {{ render_field(form_prescription.prescription_10,class="form-control form-control-sm", placeholder='10') }}
+                                        {{ render_field(form_prescription.prescription_11,class="form-control form-control-sm", placeholder='11') }}
+
+                                    </div>  
+                                          
+                                </div>  
+                               
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                </div>        
+                            </form>
+                            
+                            </div>
+                            
+                
+                
+                            
+                    </div>
+                </div>
+                </div>
+                
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+                </div>
+
+    {% endblock %}
+
+</body>
+</html>
