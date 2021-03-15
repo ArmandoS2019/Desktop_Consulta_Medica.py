@@ -50,11 +50,16 @@
         <!-- Sidebar Header    -->
         <div class="sidenav-header d-flex align-items-center justify-content-center">
           <!-- User Info-->
-          <div class="sidenav-header-inner text-center"><img src="static/img/avatar-7.jpg" alt="person" class="img-fluid rounded-circle">
-            <h2 class="h5">NAME DOCTOR</h2><span>Cardiologic</span>
+          {% if current_user.gender=='M' %}
+            <div class="sidenav-header-inner text-center"><img src="/static/img/icon_dr\doctor.png" alt="person" class="img-fluid rounded-circle">
+          {% else %}
+            <div class="sidenav-header-inner text-center"><img src="/static/img/icon_dr\doctora.png" alt="person" class="img-fluid rounded-circle">
+          {% endif %}
+
+            <h2 class="h5">{{ current_user.firstname }}</h2><span>{{ current_user.specialty }}</span>
           </div>
           <!-- Small Brand information, appears on minimized sidebar-->
-          <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>B</strong><strong class="text-primary">D</strong></a></div>
+          <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>{{ current_user.firstname[0] }}</strong><strong class="text-primary">{{ current_user.lastname[0] }}</strong></a></div>
         </div>
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">

@@ -64,6 +64,7 @@ class RegisterForm(FlaskForm):
 
     email_address = EmailField('Email', validators=[InputRequired('Campo requerido')])
     # email_address = EmailField('Email', validators=[InputRequired('Campo requerido'),check_mail_registered])
+    specialty = StringField('Especialidad',validators=[InputRequired('Campo requerido')])
     exequatur = StringField('Exequatur',validators=[InputRequired('Campo requerido')])
     password = PasswordField('Contraseña', validators=[InputRequired('Contraseña requerida'),EqualTo('confirm',message='Repetir contraseña')])
     confirm = PasswordField('Repetir contraseña')    
@@ -95,11 +96,11 @@ class MedicenterForm(FlaskForm):
     
     address = StringField('Direccion',validators=[InputRequired('Campo requerido')])
     center_number = StringField('Numero res.',validators=[InputRequired('Campo requerido')])
-    telephone = TelField('Telefono',validators=[InputRequired('Campo requerido')])
+    telephone = TelField('',validators=[InputRequired('Campo requerido')])
     
-    facebook = URLField('Facebook')
-    instagram = URLField('Instagram')
-    twitter = URLField('Twitter')
+    facebook = URLField('')
+    instagram = URLField('')
+    twitter = URLField('')
     web = URLField('Pagina Web')
 
 
@@ -135,14 +136,14 @@ class ConsultForm(FlaskForm):
 
     systolic = IntegerField('Sistólica',validators=[InputRequired('Campo requerido')])
     diastolic = IntegerField('Diastólica',validators=[InputRequired('Campo requerido')])
-    pulsations = IntegerField('Pulsaciones',validators=[InputRequired('Campo requerido')])
-    respiratory_rhythm = IntegerField('Ritmo respiratorio',validators=[InputRequired('Campo requerido')])
-    temperature = IntegerField('Temperatura',validators=[InputRequired('Campo requerido')])
-    height = IntegerField('Altura',validators=[InputRequired('Campo requerido')])
+    pulsations = IntegerField('Pulsaciones')
+    respiratory_rhythm = IntegerField('Ritmo respiratorio')
+    temperature = IntegerField('Temperatura')
+    height = IntegerField('Altura')
     weight = IntegerField('Peso',validators=[InputRequired('Campo requerido')])
-    body_mass_index = IntegerField('IMC',validators=[InputRequired('Campo requerido')])
-    glycemic = IntegerField('Glicemia',validators=[InputRequired('Campo requerido')])
-    comment = TextAreaField('', render_kw={"rows": 3, "cols": 11}, validators=[InputRequired('Campo requerido')])
+    body_mass_index = IntegerField('IMC')
+    glycemic = IntegerField('Glicemia')
+    comment = TextAreaField('', render_kw={"rows": 3, "cols": 11})
 
     
  
@@ -165,7 +166,7 @@ class PrescriptionForm(FlaskForm):
 
 class IndicationForm(FlaskForm):
 
-    indications_date = DateField('',validators=[InputRequired('Campo requerido')])
+    indications_date = DateField('FECHA INDICACIÓN',validators=[InputRequired('Campo requerido')])
     # #--------------HEMATOLOGIA----------------------------
     hemograma = BooleanField('')
     conteo_de_eosinofilos = BooleanField('')
@@ -207,6 +208,7 @@ class IndicationForm(FlaskForm):
     magnecio = BooleanField('')
     acido_urico = BooleanField('')
     sgpt = BooleanField('')
+    sgot = BooleanField('')
     fosfolosa_alcalina = BooleanField('')
     gammaglutami_t_ggt = BooleanField('')
     bilirrubina = BooleanField('')

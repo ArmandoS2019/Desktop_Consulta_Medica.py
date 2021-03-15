@@ -64,6 +64,9 @@
                             <div class="form-group col-md-4">
                                 {{ render_field(form.exequatur, class="form-control", placeholder='Exequatur') }}
                             </div>
+                            <div class="form-group col-md-8">
+                                {{ render_field(form.specialty, class="form-control", placeholder='Especialidad') }}
+                            </div>
                         </div>
                         <!-- -----------ROW---------------- -->
                         <div class="form-row">
@@ -101,7 +104,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     {{ render_field(form.nivel_admin, class="form-control", placeholder='Nivel') }}
-                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="submit" class="btn badge badge-info">Enviar</button>
                                 </div>
               
                             </div>
@@ -131,10 +134,10 @@
                                   <tr>
                                       <td>
                                       <div class="dropdown">
-                                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
+                                        <button class="btn badge badge-info dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
                                         <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                          <a href="" class="btn btn-success"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                          <a href="" class="btn badge-success"><i class="fa fa-search" aria-hidden="true"></i></a>
                                           <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                           <a href="" class="btn btn-secondary"><i class="fa fa-ban" aria-hidden="true"> Desabilitar</i></a>
                                           <a href="" class="btn btn-dark"><i class="fa fa-key" aria-hidden="true"> Forzar contraseña</i></a>

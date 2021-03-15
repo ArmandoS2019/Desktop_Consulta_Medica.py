@@ -2905,8 +2905,8 @@ a.text-dark:focus, a.text-dark:hover {
 }
 
 .badge-success {
-  color: color-yiq(#28a745);
-  background-color: #28a745;
+  color: color-yiq(#57d877);
+  background-color: #0fd884;
 }
 
 
@@ -2915,6 +2915,8 @@ a.text-dark:focus, a.text-dark:hover {
   text-decoration: none;
   background-color: #1e7e34;
 }
+
+
 
 .badge-info {
   color: color-yiq(#17a2b8);

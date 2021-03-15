@@ -68,7 +68,7 @@
                                                 <span class="caret"></span></button>
                                                 <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                 <ul class="dropdown-menu">
-                                                    <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                    <a href="" class="btn badge-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
                                                     <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                     <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                         </td>
@@ -117,7 +117,7 @@
                                           </tr>
                                       </thead>
                                       <tbody>
-                                              {% for consult in consults_tbl['consults_pacient_added'] %}
+                                              {% for indication in consults_tbl['consults_indications'] %}
                                                   <tr>
                              
               
@@ -125,10 +125,10 @@
                                                           
                                                           <div class="dropdown">
                                                               <span class="caret"></span></button>
-                                                              <i class="fa fa-file-text">  {{ consult.created_consult.strftime("%d %B, %Y") }}</i> 
+                                                              <i class="fa fa-file-text">  {{ indication.created_indications.strftime("%d %B, %Y") }}</i> 
                                                               <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                               <ul class="dropdown-menu">
-                                                                  <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                                  <a href="" class="btn badge-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
                                                                   <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                                   <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                       </td>
@@ -141,9 +141,10 @@
                                       <tfoot>
                                           <tr>
                                               <th>
-                                                  <button type="button" class="btn badge-info fa fa-file-text" data-toggle="modal" data-target="#exampleModal">
-                                                      Agregar indicación
-                                                  </button>
+                                                <button type="button" class="btn badge-info fa fa-file-text" data-toggle="modal" data-target="#myModalIndication">
+                                                    Agregar indicación 
+                                                </button>
+                                                {{ consults_tbl['consult_pacient_count'] }}
                                               </th> 
                                           </tr>
                                       </tfoot>
@@ -181,7 +182,7 @@
                                                           <i class="fa fa-file-text">  {{ indication.created_consult.strftime("%d %B, %Y") }}</i> 
                                                           <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
                                                           <ul class="dropdown-menu">
-                                                              <a href="" class="btn btn-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
+                                                              <a href="" class="btn badge-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
                                                               <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                               <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                   </td>
@@ -193,11 +194,12 @@
                                   </tbody>
                                   <tfoot>
                                       <tr>
-                                          <th>
-                                              <button type="button" class="btn badge-success fa fa-medkit" data-toggle="modal" data-target="#exampleModal">
+                                        <th>
+                                            <button type="button" class="btn badge-success fa fa-medkit" data-toggle="modal" data-target="#myModalConsult">
                                                 Receta
-                                              </button>
-                                          </th> 
+                                            </button>
+                                            {{ consults_tbl['consult_pacient_count'] }}
+                                        </th>
                                       </tr>
                                   </tfoot>
                               </table>
@@ -241,12 +243,11 @@
                                         {{ render_field(form_consult.temperature,class="form-control", placeholder='Temperatura') }}
                                     </div>     
                                     <div class="form-group col-md-4">
-                                        {{ render_field(form_consult.height,class="form-control", placeholder='Altura') }}
                                     </div>     
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        {{ render_field(form_consult.height,class="form-control", placeholder='Temperatura') }}
+                                        {{ render_field(form_consult.temperature,class="form-control", placeholder='Temperatura') }}
                                     </div>     
                                     <div class="form-group col-md-4">
                                         {{ render_field(form_consult.weight,class="form-control", placeholder='Altura') }}
@@ -268,7 +269,7 @@
                             
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="submit" class="btn badge badge-info">Enviar</button>
                                 </div>        
                             </form>
                             
@@ -294,18 +295,21 @@
                 <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-body">
-                        No. 0000-21
-                        <div class="modal-header">
-                            <h3 class="modal-title badge badge-info">FECHA INDICACIÓN</h3> <br>
-                            {{ render_field(form_indication.indications_date,class="form-control") }}  
-                             
-                            <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
-                
-                            </div>
-
-                            <form action="" method="POST">
+                        <form action="" method="POST">
                                 {{ form_indication.csrf_token() }} 
-                                
+                                <div class="modal-header">
+                                    <h3 class="modal-title badge badge-info">INDICACIÓN MÉDICA</h3>
+                                    <h3 class="modal-title badge badge-warning">NO. {{ consults_tbl['indication_number'] }}</h3>
+                                    
+                                    <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
+                                </div>
+
+                                <div class="form-row col-md-3">
+                                    <div class="col">
+                                        {{ render_field(form_indication.indications_date,class="form-control") }} 
+                                    </div>
+                                  </div>
+                                    
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
                                         <div>  
@@ -400,6 +404,27 @@
                                                     </li>
                                                 </ul>
                                               </li>
+
+                                              <li><a href="#hormonasdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-braille" aria-hidden="true"></i> HORMONAS </a>
+                                                <ul id="hormonasdropdownDropdown" class="collapse list-unstyled ">
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t3,id="list-t3", class="form-check") }}
+                                                        <label for="list-t3"> T3</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t4,id="list-t4", class="form-check") }}
+                                                        <label for="list-t4"> T4</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.tsh,id="list-tsh", class="form-check") }}
+                                                        <label for="list-tsh"> Tsh</label>
+                                                    </li>
+                                                    <li class="d-flex align-items-center"> 
+                                                        {{ render_field(form_indication.t4_libre,id="list-t4_libre", class="form-check") }}
+                                                        <label for="list-t4_libre"> T4_libre</label>
+                                                    </li>
+                                                </ul>
+                                              </li>
                                         </div>
                                     </div>
 
@@ -481,6 +506,10 @@
                                                 <label for="list-sgpt"> Sgpt</label>
                                             </li>
                                             <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.sgot,id="list-sgot", class="form-check") }}
+                                                <label for="list-sgot"> sgot</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
                                                 {{ render_field(form_indication.fosfolosa_alcalina,id="list-fa", class="form-check") }}
                                                 <label for="list-fa"> Fosfolosa alcalina</label>
                                             </li>
@@ -507,6 +536,10 @@
                                             <li class="d-flex align-items-center"> 
                                                 {{ render_field(form_indication.laptosa,id="list-lap", class="form-check") }}
                                                 <label for="list-lap"> Laptosa</label>
+                                            </li>
+                                            <li class="d-flex align-items-center"> 
+                                                {{ render_field(form_indication.fosfato_acido_total,id="list-fosfato_acido_total", class="form-check") }}
+                                                <label for="list-fosfato_acido_total"> fosfato_acido_total</label>
                                             </li>
                                             <li class="d-flex align-items-center"> 
                                                 {{ render_field(form_indication.dosificacion_hierro_senico,id="list-hs", class="form-check") }}
@@ -613,26 +646,7 @@
                                                 </ul>
                                               </li>
                                             
-                                              <li><a href="#hormonasdropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-braille" aria-hidden="true"></i> HORMONAS </a>
-                                                <ul id="hormonasdropdownDropdown" class="collapse list-unstyled ">
-                                                    <li class="d-flex align-items-center"> 
-                                                        {{ render_field(form_indication.t3,id="list-t3", class="form-check") }}
-                                                        <label for="list-t3"> T3</label>
-                                                    </li>
-                                                    <li class="d-flex align-items-center"> 
-                                                        {{ render_field(form_indication.t4,id="list-t4", class="form-check") }}
-                                                        <label for="list-t4"> T4</label>
-                                                    </li>
-                                                    <li class="d-flex align-items-center"> 
-                                                        {{ render_field(form_indication.tsh,id="list-tsh", class="form-check") }}
-                                                        <label for="list-tsh"> Tsh</label>
-                                                    </li>
-                                                    <li class="d-flex align-items-center"> 
-                                                        {{ render_field(form_indication.t4_libre,id="list-t4_libre", class="form-check") }}
-                                                        <label for="list-t4_libre"> T4_libre</label>
-                                                    </li>
-                                                </ul>
-                                              </li>
+                                              
                                         </div>
                                         
                             
@@ -718,6 +732,10 @@
                                                     <label for="list-ca15_3"> ca15_3</label>
                                                 </li>
                                                 <li class="d-flex align-items-center"> 
+                                                    {{ render_field(form_indication.ca19_9,id="list-ca19_9", class="form-check") }}
+                                                    <label for="list-ca19_9"> ca19_9</label>
+                                                </li>
+                                                <li class="d-flex align-items-center"> 
                                                     {{ render_field(form_indication.toxoplasmosis_igg_igm,id="toxoplasmosis_igg_igm", class="form-check") }}
                                                     <label for="toxoplasmosis_igg_igm"> toxoplasmosis_igg_igm</label>
                                                 </li>
@@ -769,7 +787,7 @@
                                
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="submit" class="btn badge badge-info">Enviar</button>
                                 </div>        
                             </form>
                             
@@ -834,7 +852,7 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="submit" class="btn badge badge-info">Enviar</button>
                                 </div>        
                             </form>
                             

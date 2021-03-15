@@ -10,13 +10,13 @@ class Config(object):
     # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://armandosuazo:a1234567@armandosuazo.mysql.pythonanywhere-services.com/medical_db"
     # SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://armandosuazo:a1234567@armandosuazo.mysql.pythonanywhere-services.com/inspection_db"
     SQLALCHEMY_DATABASE_URI = 'mysql://root:''@127.0.0.1/medic_consult_db'
-    # SQLALCHEMY_POOL_SIZE = 30
-    # SQLALCHEMY_MAX_OVERFLOW = 20
-    # SQLALCHEMY_POOL_TIMEOUT = 300
+    SQLALCHEMY_POOL_SIZE = 30
+    SQLALCHEMY_MAX_OVERFLOW = 20
+    SQLALCHEMY_POOL_TIMEOUT = 300
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = True    
-
+    DEBUG = True  
+ 
     #********MY PATHS ROUTES ------------****************************
     IMAGE_UPLOADS = 'C:/Users/UserGP/Documents/PROC_INSP/app/static/img/img_database'
     IMAGE_UPLOADS_PROFILE = 'C:/Users/UserGP/Documents/PROC_INSP/app/static/img/profile'
