@@ -18,6 +18,8 @@ class Config(object):
     DEBUG = True  
  
     #********MY PATHS ROUTES ------------****************************
+    PATH_PDF_FOLDER = "C:/Users/UserGP/Documents/MEDICAL CONSULT/app/pdf_report/"
+
     IMAGE_UPLOADS = 'C:/Users/UserGP/Documents/PROC_INSP/app/static/img/img_database'
     IMAGE_UPLOADS_PROFILE = 'C:/Users/UserGP/Documents/PROC_INSP/app/static/img/profile'
     SAVED_GRAPH_PNG = "C:/Users/UserGP/Documents/PROC_INSP/app/saved_graph"

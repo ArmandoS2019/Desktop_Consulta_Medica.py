@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>PDF prescripcion</title>
+   
+  </head>
+  <body>
+
+
+    <style type = "text/css">
+        @page {
+            size: A5;
+            margin: .110in;
+          }
+    
+        table {
+            border-collapse: collapse;
+        }
+
+        td{border: 1px solid rgb(68, 216, 191);}
+
+        #logo-prescription{
+            height:80px;
+            text-align:center;
+            color:rgb(255, 255, 255);
+            text-align:center;
+            font-size:5;
+            font-weight: bold;
+            background-color: rgb(68, 216, 191);}
+            
+        #id-direccion1{
+            text-align:center;
+            font-style:italic;
+            color:rgb(23, 146, 126);
+        }
+
+        #id-text-color{
+            color:rgb(16, 110, 95);
+        }
+       
+        #id-body{
+            margin-left: 25px;
+            font-size:x-large;
+        }
+    </style>
+
+    <table >
+        <pdf:language name="spanish"/>
+
+        <tbody>
+            <tr>
+                <td>
+                    <h1 id="logo-prescription"> 
+                        <img   src="C:\Users\UserGP\Documents\MEDICAL CONSULT\app\static\img\favicon.ico" alt="">
+                        NOMBRE DEL CENTRO MEDICO UNIVERSAL EJEMPLO
+                    </h1>
+                        
+                        <h1 id="id-direccion1"> Dr(a). {{ data['user_medic']|upper }}
+                            <br>Medico Internista
+                            <h1 id="id-text-color">Direccion sssssssssssssssssssssssssss            Cel. (809-555-5555) Tel. (809-555-5555)</h1>
+                    </h1>
+                </td>
+            </tr>
+           <tr>
+               <td >
+                   <b id="id-text-color" style="font-size:xx-large; font-style:italic;">RX</b>
+                   <br>
+                   <div id="id-body">
+                       1- {{ data['prescription_tbl'].prescription_1 }}<br>
+                       2- {{ data['prescription_tbl'].prescription_2 }}<br>
+                       3- {{ data['prescription_tbl'].prescription_3 }}<br>
+                       4- {{ data['prescription_tbl'].prescription_4 }}<br>
+                       5- {{ data['prescription_tbl'].prescription_5 }}<br>
+                       6- {{ data['prescription_tbl'].prescription_6 }}<br>
+                       7- {{ data['prescription_tbl'].prescription_7 }}<br>
+                       8- {{ data['prescription_tbl'].prescription_8 }}<br>
+                       9- {{ data['prescription_tbl'].prescription_9 }}<br>
+                       10- {{ data['prescription_tbl'].prescription_10 }}<br>
+                       11- {{ data['prescription_tbl'].prescription_11 }}<br>
+                      
+                      
+                       
+                   </div>
+               </td>
+           </tr>
+           <tr>
+            <td>
+                <div>
+                    
+                    <h1>Nombre del paciente: {{ data['prescription_tbl'].prescription_number }} <br>
+                        Direccion: Calle manuel cerrat No. 10   <br> 
+                        Edad: 75<br> 
+                        Fecha: {{ data['prescription_tbl'].prescription_date.strftime('%d-%m-%Y') }}    
+                    </h1>
+                    <h1 id="id-text-color">Firma del medico:_________________</h1>
+                    
+                    <h1 id="logo-prescription">
+                        <pdf:barcode value="{{ data['prescription_tbl'].prescription_number }}" type="code128" humanreadable="1" align="right" />
+                    </h1>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>  
+   
+
+
+   
+  </body>
+</html>

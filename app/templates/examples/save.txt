@@ -229,3 +229,32 @@
                 </div>
 
                 </div>
+
+------------------------------------------------------------
+if request.method == "POST" and form_prescription.validate_on_submit(): 
+        # try:
+        add_new_receta = Prescription_tbl(
+        prescription_number=f"TEST 0001-{ datetime.now().strftime('%Y') }",
+        prescription_date=form_prescription.prescription_date.data,
+        prescription_1=form_prescription.prescription_1.data,
+        prescription_2=form_prescription.prescription_2.data,
+        prescription_3=form_prescription.prescription_3.data,
+        prescription_4=form_prescription.prescription_4.data,
+        prescription_5=form_prescription.prescription_5.data,
+        prescription_6=form_prescription.prescription_6.data,
+        prescription_7=form_prescription.prescription_7.data,
+        prescription_8=form_prescription.prescription_8.data,
+        prescription_9=form_prescription.prescription_9.data,
+        prescription_10=form_prescription.prescription_10.data,
+        prescription_11=form_prescription.prescription_11.data,
+        my_pacient_id=id,
+        created_consult=datetime.now())
+        
+        db.session.add(add_new_receta)
+        db.session.commit()
+
+        flash(Markup('Registro exitoso.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'), "success")
+        # return render_template('for_user/pacient.html', form_pacient=form_pacient, 
+        #                                        pacients_tbl=pacients_tbl)
+        return redirect(url_for('pdf_prescription', id=id))
+

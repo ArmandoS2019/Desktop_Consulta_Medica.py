@@ -146,7 +146,7 @@
 
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
-                                        {{ render_field(form_pacient.cedula_patient,class="form-control", placeholder='Cédula') }}
+                                        {{ render_field(form_pacient.cedula_patient,maxlength=11,class="form-control", placeholder='Cédula') }}
                                     </div>
                                     <div class="form-group col-md-5">
                                         {{ render_field(form_pacient.birthday,class="form-control", placeholder='Nacimiento') }}

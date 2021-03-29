@@ -176,15 +176,9 @@
                          
           
                                                   <td>
-                                                      
-                                                      <div class="dropdown">
-                                                          <span class="caret"></span></button>
-                                                          <i class="fa fa-file-text">  {{ indication.created_consult.strftime("%d %B, %Y") }}</i> 
-                                                          <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-cogs" aria-hidden="true"></i>
-                                                          <ul class="dropdown-menu">
-                                                              <a href="" class="btn badge-success"><i class="fa fa-eye fa-1x" aria-hidden="true"></i></a>
-                                                              <a href="" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                                              <a href="" class="btn btn-danger" onclick="return confirm('Seguro desea eliminar esta consulta?');"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                    <a href="{{ url_for('pdf_prescription', id=indication.prescription_number ) }}" class="btn badge-danger" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"> Imprimir</i></a>
+                                                    <i>  {{ indication.created_consult.strftime("%d %B, %Y") }}</i> 
+
                                                   </td>
           
                                                  
@@ -222,7 +216,7 @@
                 
                             </div>
 
-                            <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                            <form action="{{ url_for('consult', id=consults_tbl['pacient_id']) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                                 {{ form_consult.csrf_token() }} 
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
@@ -295,11 +289,11 @@
                 <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form action="" method="POST">
+                        <form action="{{ url_for('indication', id=consults_tbl['pacient_id']) }}" method="POST">
                                 {{ form_indication.csrf_token() }} 
                                 <div class="modal-header">
                                     <h3 class="modal-title badge badge-info">INDICACIÓN MÉDICA</h3>
-                                    <h3 class="modal-title badge badge-warning">NO. {{ consults_tbl['indication_number'] }}</h3>
+                                    <h3 class="modal-title badge badge-warning"><b>NO. {{ consults_tbl['indication_number'] }}</b> </h3>
                                     
                                     <button type="button" id="closeModalNotes" aria-label="Close" data-dismiss="modal" class="close"><span aria-hidden="true">×</span></button>
                                 </div>
@@ -821,7 +815,7 @@
                 
                             </div>
 
-                            <form action="" method="POST">
+                            <form action="{{ url_for('prescription', id=consults_tbl['pacient_id']) }}" method="POST">
                                 {{ form_prescription.csrf_token() }} 
                                 <div class="form-row">
                                     <div class="form-group col-md-3">

@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, Markup, redirect, url_for, session
+from flask import render_template, request, flash, Markup, redirect, url_for, session, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 from flask_login import login_user, login_required, current_user, logout_user, fresh_login_required
@@ -9,7 +9,14 @@ from app import login_manager
 from app import MedicUser_tbl, MediCenter_tbl, Pacient_tbl, Consult_tbl, Prescription_tbl, Indications_tbl
 # ---------------FORMS------------------
 from app.forms import LoginForm, RegisterForm, MedicenterForm, PacientForm, ConsultForm, PrescriptionForm, IndicationForm
+# ---------------PDF REPORT-----------------------
+import os
+from xhtml2pdf import pisa
+from jinja2 import Template, Markup
 # --------------------------------------
+
+
+
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -218,18 +225,33 @@ def evaluations(id=None):
     consult_pacient_count = db.session.query(Consult_tbl).filter(Consult_tbl.my_pacient_id==id).count()
     count_indications = db.session.query(Indications_tbl).filter(Indications_tbl.my_pacient_id==id).count()
     
-    indication_number=f"000{count_indications+1}-{ datetime.now().strftime('%Y') }"
+    indication_number=f"{count_indications+1}-{ datetime.now().strftime('%Y') }"
 
-    consults_tbl = {'pacient':pacient,
+    consults_tbl = {'pacient_id':id,
+                    'pacient':pacient,
                     'consults_pacient_added':consults_pacient_added,
                     'consults_prescriptions':consults_prescriptions,
                     'consults_indications':consults_indications,
                     'consult_pacient_count':consult_pacient_count,
                     'indication_number':indication_number}
-    """TODO ESTUDIAR LA LOGICA, SI EL PACIENTE YA ESTA RESTRADO POR OTRO DOCTOR Y TIENE HISTORIAL, SOLICITAR
-    PERMISO, LE LLEGA UNA NOTIFICACION, SI ESTE ACEPTA, ENTONCES AL SOLICITANTE SE LE DA PERMISO
-    Y AGREGA HISTORIAL DEL PACIENTE, PERO DEJAR GUARDAR EL PERFIL, SI YA ESTA REGISTRADO Y ESTA EN OTRO PASA ESTO"""
-        
+    
+
+        # except:
+            # flash(Markup('Algun error al guardar los datos.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'),"danger")
+
+
+    return render_template('for_user/evaluations.html', form_consult=form_consult, 
+                                                        form_prescription=form_prescription,
+                                                        form_indication=form_indication,
+                                                        consults_tbl=consults_tbl)
+
+
+
+@app.route('/consult')
+@app.route('/consult/<id>', methods=['GET','POST'])
+@login_required
+def consult(id=None):
+    form_consult = ConsultForm()
     if request.method == "POST" and form_consult.validate_on_submit(): 
         # try:
         add_new_med_consult = Consult_tbl(
@@ -250,16 +272,26 @@ def evaluations(id=None):
         db.session.commit()
 
         flash(Markup('Registro exitoso.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'), "success")
+        # return render_template('for_user/pacient.html', form_pacient=form_pacient, 
+        #                                        pacients_tbl=pacients_tbl)
         return redirect(url_for('evaluations', id=id))
 
-        # except:
-            # flash(Markup('Algun error al guardar los datos.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'),"danger")
+    return redirect(url_for('evaluations', id=id))
+
+
+@app.route('/prescription')
+@app.route('/prescription/<id>', methods=['GET','POST'])
+@login_required
+def prescription(id=None):
+    form_prescription = PrescriptionForm()
+
+    count_indications = db.session.query(Prescription_tbl).filter(Prescription_tbl.my_pacient_id==id).count()
+    prescription_number=f"{count_indications+1}-{ datetime.now().strftime('%Y') }"
 
     if request.method == "POST" and form_prescription.validate_on_submit(): 
         # try:
-
         add_new_receta = Prescription_tbl(
-        prescription_number=f"0001-{ datetime.now().strftime('%Y') }",
+        prescription_number=prescription_number,
         prescription_date=form_prescription.prescription_date.data,
         prescription_1=form_prescription.prescription_1.data,
         prescription_2=form_prescription.prescription_2.data,
@@ -279,13 +311,21 @@ def evaluations(id=None):
         db.session.commit()
 
         flash(Markup('Registro exitoso.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'), "success")
-        # return render_template('for_user/pacient.html', form_pacient=form_pacient, 
-        #                                        pacients_tbl=pacients_tbl)
         return redirect(url_for('evaluations', id=id))
 
+    return redirect(url_for('evaluations', id=id))
+
+
+@app.route('/indication')
+@app.route('/indication/<id>', methods=['GET','POST'])
+@login_required
+def indication(id=None):
+    form_indication = IndicationForm()
+    count_indications = db.session.query(Indications_tbl).filter(Indications_tbl.my_pacient_id==id).count()
+    indication_number=f"000{count_indications+1}-{ datetime.now().strftime('%Y') }"
+    
     if request.method == "POST" and form_indication.validate_on_submit(): 
         # try:
-
         add_new_indication = Indications_tbl(
         indication_number=indication_number,
         indications_date=form_indication.indications_date.data,
@@ -409,28 +449,45 @@ def evaluations(id=None):
         flash(Markup('Registro exitoso.  <a type="button" class="close" data-dismiss="alert" aria-label="close">&times;</a>'), "success")
         # return render_template('for_user/pacient.html', form_pacient=form_pacient, 
         #                                        pacients_tbl=pacients_tbl)
-        return redirect(url_for('evaluations', id=id))
+        return redirect(url_for('pdf_prescription', id=id))
+
+    return redirect(url_for('evaluations', id=id))
 
 
-    return render_template('for_user/evaluations.html', form_consult=form_consult, 
-                                                        form_prescription=form_prescription,
-                                                        form_indication=form_indication,
-                                                        consults_tbl=consults_tbl)
+@app.route('/pdf_prescription')
+@app.route('/pdf_prescription/<id>', methods=['GET','POST'])
+@login_required
+def pdf_prescription(id):
+    try:
+        prescription_tbl = db.session.query(Prescription_tbl).filter(Prescription_tbl.prescription_number==id).first()
+        print(prescription_tbl)
+        
+        path_pdf_folder = app.config['PATH_PDF_FOLDER']
+        output_filename = path_pdf_folder + "pdf_prescription.pdf"
+        result_file = open(output_filename, 'w+b')
+
+        template = Template(open(os.path.join(path_pdf_folder + "pdf_prescription.html")).read())
+        #TODO REDUCE CODE IN HTMLPDF GO TO COUNT MODULE
+        html = template.render(data={'user_medic':current_user.firstname,
+                                      'prescription_tbl':prescription_tbl,})
+
+        pisa_resutl_file = pisa.CreatePDF(html, dest=result_file)
+        # pisa_resutl_file = pisa.CreatePDF(html.encode("ISO-8859-1"), dest=result_file, encoding='ISO-8859-1')
+        result_file.close()
+    except:
+        return "<h2 style='background-color: red; color: white;'>Algun error o no seleccionó datos de fecha</h2>"
+    else:
+        return send_file(output_filename, attachment_filename='pdf_prescription.pdf')
 
 
 
 
-@app.route('/base')
+@app.route('/index')
+@login_required
 def base():
     return render_template('base.html')
 
-@app.route('/test')
-def test():
-    return render_template('forms.html')
 
-@app.route('/main')
-def main():
-    return render_template('index.html')
 
 @app.route('/logout')
 @login_required
