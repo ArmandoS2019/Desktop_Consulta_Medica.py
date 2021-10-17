@@ -10,6 +10,7 @@ import pandas as pd
 import os
 import time
 import re
+import sys
 # from telegram.ext.messagehandler import MessageHandler
 # from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageFilter, Filters
 # from telegram import ChatAction, InlineKeyboardMarkup, InlineKeyboardButton
@@ -20,9 +21,32 @@ import re
 # from threading import Thread
 
 from telethon import TelegramClient, events, Button
+from telethon.tl import types
 from datetime import datetime
 
 # logging.basicConfig(level=logging.DEBUG, format="%(threadName)s: %(message)s")
+
+
+class ReplaceText:
+    def __init__(self, text_to_replace_word):
+        self.text_to_replace_word = str(text_to_replace_word)
+
+    def replace_word_in_text(self):
+        text_to_replace_word = str(self.text_to_replace_word).upper().replace('Siendo la fecha y hora mencionada,','').replace('\t',' ').replace('\n\t',' ').replace('\n\n',' ').replace('\n',' ').replace('\r',' ').replace('9-1-1',
+                                'NUEVE UNO UNO').replace('\r','').replace('CAL.','CALIBRE').replace('C/O','CABO').replace('R/O','RASO').replace('CAP.',
+                                'CAPITÁN').replace('MR.','MAYOR').replace('SGTO.','SARGENTO').replace('1ER.','PRIMER').replace('2DO.',
+                                'SEGUNDO').replace('TTE.','TENIENTE').replace('COR.','CORONEL').replace('CNEL.','CORONEL').replace('LIC.',
+                                'LICENCIADO').replace('LICDO.','LICENCIADO').replace('LICDA.','LICENCIADA').replace('DOM.',
+                                'DOMINICANO').replace('DOM,','DOMINICANO').replace('AV.','AVENIDA').replace('S/N','SIN NÚMERO').replace('DX.',
+                                'DIAGNÓSTICO MÉDICO').replace('DX,','DIAGNÓSTICO MÉDICO').replace('DX.:','DIAGNÓSTICO MÉDICO').replace('DX:',
+                                'DIAGNÓSTICO MÉDICO').replace('CED.','CÉDULA').replace('CED:','CÉDULA').replace('CEDULA','CÉDULA').replace('NO.',
+                                'NÚMERO').replace('DEPTO.','DEPARTAMENTO').replace('R.D.','REPÚBLICA DOMINICANA').replace('D.N.',
+                                'DISTRITO').replace('MULTIPLE','MÚLTIPLE').replace('-','').replace('TRANSITO','TRÁNSITO').replace('TRAUMA',
+                                'TRÁUMA').replace('COLISIONO','COLISIONÓ').replace('S/N','SIN NÚMERO').replace('RD$',' ').replace('MOTOR',
+                                'MOTÓR').replace('PUBLICA','PÚBLICA').replace('SR.','SEÑOR').replace('DR.','DOCTOR').replace('SRA.',
+                                'SEÑORA').replace('DRA.','DOCTORA').replace('P.N.',' ').replace('P.N.,','').replace('PN.,','').replace('PARASITO','PARÁSITO').replace('ALMANZAR','ALMÁNZAR')
+        
+        return text_to_replace_word
 
 class MakeDb:
     def __init__(self):
@@ -48,9 +72,17 @@ class MakeDb:
             print(repr(f"Error to get CONN to SQL SERVER-> {e}"))
 
         try:
-            sql_query = "SELECT * FROM NotasInformativasPN ORDER BY Fecha DESC"
-            self.df1 = pd.read_sql(sql_query, conn)
-            self.df_db = pd.DataFrame(self.df1).sort_values(by=['Expediente'], ascending=True).tail(11)
+            # sql_query = "SELECT * FROM NotasInformativasPN ORDER BY Fecha DESC"
+            sql_query = '''SELECT * FROM NotasInformativasPN ORDER BY Fecha DESC;'''
+
+            # self.df1 = pd.read_sql(sql_query, conn)
+            # self.df_db = pd.DataFrame(self.df1).sort_values(by=['Expediente'], ascending=True).tail(11)
+            # print(sys.getsizeof(self.df1))
+            # print(sys.getsizeof(self.df_db))
+            # print(repr('DIRECT QUERY SERVER'))
+            data = conn.execute(sql_query)
+            da = [x for x in data]
+
             print(repr('Successful df to SQL SERVER'))
 
             # TODO pending to SEARCH ONLY 2 FIELDS caption and text to convert FOR BETTER PERFORMANCE
@@ -58,7 +90,7 @@ class MakeDb:
             print(f'Error get query PANDAS to SQL SERVER-> {e}')
             pass
         else:
-            return self.df_db
+            return data
 
     def view_all_tables(self):
         for row in self.cursor.tables():
@@ -98,8 +130,9 @@ class MakeSqlite():
 
     def get_consult_dblite(self):
         #THIS LAMBDA IS FOR GET CLEAR LIST OF DATA FETCHALL
-        self.conn.row_factory = lambda cursor, row: row[0]
-        data_consult = self.conn.execute("SELECT notes_id FROM tbl_notes ORDER BY current_date").fetchall()
+        # self.conn.row_factory = lambda cursor, row: row[0]
+        # data_consult = self.conn.execute("SELECT notes_id, tipo_hecho FROM tbl_notes ORDER BY current_date").fetchall()
+        data_consult = self.conn.execute("SELECT notes_id,tipo_hecho FROM tbl_notes ORDER BY current_date;")
         print(repr(data_consult))
         print(repr('Successful view QUERY data to SQLite'))
  
@@ -125,7 +158,7 @@ class MakeAudio:
             name_of_audiofile
     """
 
-    def __init__(self, hour_of_case, date_of_case, text_to_speech, name_of_audiofile):
+    def __init__(self, hour_of_case, date_of_case, word_to_replace_in_text, name_of_audiofile):
 
         espanish_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0"
         english_voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0"
@@ -136,23 +169,21 @@ class MakeAudio:
         self.voices = self.engine.getProperty('voices') 
         self.engine.setProperty("voice", espanish_voice_id)
 
-                                                                     # Siendo la fecha y hora mencionada,
-        # self.text_to_speech = str(f"SIENDO LAS {hour_of_case} HORAS DEL DÍA {date_of_case}, {text_to_speech}").upper().replace('Siendo la fecha y hora mencionada,',' ').replace('  ',
-        # ' ').replace('\t',' ').replace('\n\t',' ').replace('\n\n',' ').replace('\n',' ').replace('\r','').replace('9-1-1',
-        # 'NUEVE UNO UNO').replace('\r','').replace('CAL.','CALIBRE').replace('C/O','CABO').replace('R/O','RASO').replace('CAP.','CAPITÁN').replace('MR.','MAYOR').replace('SGTO.','SARGENTO').replace('1ER.',
-        # 'PRIMER').replace('2DO.','SEGUNDO').replace('TTE.','TENIENTE').replace('COR.','CORONEL').replace('CNEL.','CORONEL').replace('LIC.',
-        # 'LICENCIADO').replace('LICDO.','LICENCIADO').replace('LICDA.','LICENCIADA').replace('DOM.','DOMINICANO').replace('DOM,','DOMINICANO').replace('AV.',
-        # 'AVENIDA').replace('S/N','SIN NÚMERO').replace('DX,','DIAGNÓSTICO MÉDICO').replace('DX.:','DIAGNÓSTICO MÉDICO').replace('DX:','DIAGNÓSTICO MÉDICO').replace('CED.',
-        # 'CÉDULA').replace('CED:','CÉDULA').replace('CEDULA','CÉDULA').replace('NO.','NÚMERO').replace('DEPTO.','DEPARTAMENTO').replace('R.D.',
-        # 'REPÚBLICA DOMINICANA').replace('D.N.','DISTRITO').replace('MULTIPLE','MÚLTIPLE').replace('-','').replace('TRANSITO',
-        # 'TRÁNSITO').replace('TRAUMA','TRÁUMA').replace('COLISIONO','COLISIONÓ').replace('S/N','SIN NÚMERO').replace('RD$',' ').replace('MOTOR',
-        # 'MOTÓR').replace('PUBLICA','PÚBLICA').replace('SR.','SEÑOR').replace('DR.','DOCTOR').replace('SRA.','SEÑORA').replace('DRA.','DOCTORA').replace('P.N.',' ').replace('P.N.,',
-        # ' ').replace('PN.,',' ').replace('PARASITO','PARÁSITO')
-        replaces = {"siendo las hora y fecha mencionada": " ",
-                "las":" LAS",
-                "!":"."}
-                
-        self.text_to_speech = re.sub("|".join(replaces.keys()), lambda match: replaces[match.string[match.start():match.end()]], text_to_speech, re.IGNORECASE)
+        self.text_to_speech = str(f"SIENDO LAS {hour_of_case} HORAS DEL DÍA {str(date_of_case).replace('-','/')}, {word_to_replace_in_text}").upper().replace('Siendo la fecha y hora mencionada,',
+        ' ').replace('\t',' ').replace('\n\t',' ').replace('\n\n',' ').replace('\n',' ').replace('\r',' ').replace('9-1-1',
+        'NUEVE UNO UNO').replace('\r','').replace('CAL.','CALIBRE').replace('C/O','CABO').replace('R/O','RASO').replace('CAP.',
+        'CAPITÁN').replace('MR.','MAYOR').replace('SGTO.','SARGENTO').replace('1ER.','PRIMER').replace('2DO.',
+        'SEGUNDO').replace('TTE.','TENIENTE').replace('COR.','CORONEL').replace('CNEL.','CORONEL').replace('LIC.',
+        'LICENCIADO').replace('LICDO.','LICENCIADO').replace('LICDA.','LICENCIADA').replace('DOM.',
+        'DOMINICANO').replace('DOM,','DOMINICANO').replace('AV.','AVENIDA').replace('S/N','SIN NÚMERO').replace('DX.',
+        'DIAGNÓSTICO MÉDICO').replace('DX,','DIAGNÓSTICO MÉDICO').replace('DX.:','DIAGNÓSTICO MÉDICO').replace('DX:',
+        'DIAGNÓSTICO MÉDICO').replace('CED.','CÉDULA').replace('CED:','CÉDULA').replace('CEDULA','CÉDULA').replace('NO.',
+        'NÚMERO').replace('DEPTO.','DEPARTAMENTO').replace('R.D.','REPÚBLICA DOMINICANA').replace('D.N.',
+        'DISTRITO').replace('MULTIPLE','MÚLTIPLE').replace('-','').replace('TRANSITO','TRÁNSITO').replace('TRAUMA',
+        'TRÁUMA').replace('COLISIONO','COLISIONÓ').replace('S/N','SIN NÚMERO').replace('RD$',' ').replace('MOTOR',
+        'MOTÓR').replace('PUBLICA','PÚBLICA').replace('SR.','SEÑOR').replace('DR.','DOCTOR').replace('SRA.',
+        'SEÑORA').replace('DRA.','DOCTORA').replace('P.N.',' ').replace('P.N.,','').replace('PN.,',
+        '').replace('PARASITO','PARÁSITO').replace('ALMANZAR','ALMÁNZAR')
 
         self.name_of_audio = f'{str(name_of_audiofile)}.ogg'
       
@@ -179,17 +210,14 @@ class GetDataDB(MakeSqlite, MakeDb):
         MakeDb.__init__(self)
 
         self.df_db = self.connnect_to_SQLdb()
-        self.my_list_of_id = self.get_consult_dblite()
+        self.my_list_of_id = [data for data in self.get_consult_dblite()]
         #self.delete_consult_dblite()
-        #! THINK CAN MAKE BETTER WITH DATAFRAME
-        # print(repr(self.df_db['Resumen del Hecho']))
-        # self.df_db['Resumen del Hecho'].replace({"Siendo":'Funciola'}, regex=True)
-        # print(repr(self.my_list_of_id))
 
         self.get_data_from_db()
 
 
     def get_data_from_db(self):
+        print(repr(self.my_list_of_id))
         try:
 
             # name_of_file_audio = ''
@@ -198,18 +226,21 @@ class GetDataDB(MakeSqlite, MakeDb):
             for row in self.df_db.iloc:  
                 if row[9] != None:
                 # if row[4] == 'PERDIDAS HUMANAS':
-
-                    name_of_file_audio, body_text_of_audio, hour_of_case, date_of_case = row[0],row[9],row[6],row[5]   #I
-
-                    if name_of_file_audio not in self.my_list_of_id:
+                    start_time = time.time()
+                    name_of_file_audio, body_text_of_audio, hour_of_case, date_of_case, type_of_case = row[0],row[9],row[6],row[5],row[11]   #I
+                    print(repr(name_of_file_audio))
+                    print(repr(self.my_list_of_id[0]))
+                    if name_of_file_audio not in self.my_list_of_id[0]:
                         print("LOOK FOR THIS ID ",name_of_file_audio)
                         #THIS save audio
                         my_audio = MakeAudio(hour_of_case,date_of_case,body_text_of_audio, name_of_file_audio)
                         my_audio.saveAudio()
 
-                        self.insert_data_in_dblite((name_of_file_audio,datetime.now(), 'type_of_case'))
+                        self.insert_data_in_dblite((name_of_file_audio,datetime.now(), type_of_case))
                         # os.unlink(f'my_audios/{name_of_file_audio}.ogg')
                         # name_of_file_audio = name_of_file_audio
+                        print(f'TEST OF RETURN REAL NAME AUDIO: {name_of_file_audio} FOR TITLE')
+                        print("save SQLITE insert audio time--- %s seconds ---" % (time.time() - start_time))
                     else:
                         pass
                         # if name_of_file_audio:
@@ -230,7 +261,7 @@ class CreateTelegram2(MakeSqlite, MakeDb):
     def __init__(self):
 
         MakeSqlite.__init__(self)
-        MakeDb.__init__(self)
+        # MakeDb.__init__(self)
         # link_auth = 'https://my.telegram.org/auth'
         # api_id = 8934265 #? FLOTA INSPECTORIA
         # api_hash = '8905f539615f4b58f9e7708d013d292b' #? FLOTA INSPECTORIA
@@ -244,6 +275,7 @@ class CreateTelegram2(MakeSqlite, MakeDb):
 
         # client = TelegramClient('anon', api_id, api_hash)
         client = TelegramClient('login.session', api_id, api_hash).start(phone=phone)
+        client.parse_mode = 'html'
         # list all sessions
         print(client.session.list_sessions())
         try:
@@ -252,37 +284,61 @@ class CreateTelegram2(MakeSqlite, MakeDb):
             # print(client.is_user_authorized())
             async def main():
                 # Getting information about yourself
-                me = await client.get_me()
+                # me = await client.get_me()
 
                 # print(me.stringify())
                 # # You can print all the dialogs/conversations that you are part of:
                 # async for dialog in client.iter_dialogs():
                 #     print(dialog.name, 'has ID', dialog.id)
-                #? TEST FLOTA
-                # await client.log_out()
+                # #? TEST FLOTA
+                # # await client.log_out()
          
                 while True:
+                   
                     try:
                         save_audio_and_return_name_file = GetDataDB()
+                        
+                        self.my_list_of_id = self.get_consult_dblite()
+                        print(self.my_list_of_id)
+                        # print(self.my_list_of_id)
+                        # save_audio_and_return_name_file.get_data_from_db()
                         # pass
                     except Exception as e:
                         print(repr(f"Error dentro botsave audio getdata{e}"))
                         pass
-                    
+
                     for file_audio in os.listdir('my_audios'):
-                        # FOR FILE IN MY FOLDER FILES IF NOT .OGG REMOVE FILE
-                        if file_audio[-4:] == '.ogg':
-                            #FLOTA_INSPECTORIA_ID = -606469599
-                            GRUPO_INSPECTORIA_SE_ID = -1001450279157
+                        GRUPO_INSPECTORIA_SE_ID = -1001450279157
+                        if file_audio[-4:] == '.ogg' and file_audio[:-4] in self.my_list_of_id:
+                            print('looking for TYPE OF CASE')
+                            print(self.my_list_of_id)
+                            # await client.send_message(GRUPO_INSPECTORIA_SE_ID,'Some <b>bold</b> and <i>italic</i> text')
                             await client.send_file(GRUPO_INSPECTORIA_SE_ID, 
                                 f'my_audios/{file_audio}', 
-                                thumb='logopn.jpg',
                                 voice_note=True,
-                                caption=f'P.N. {file_audio[:11]}',
-                                audio=True) # P
+                                caption=f'<i><b>bold</b></i>\n{file_audio[:11]}',
+                                audio=True, 
+                                parse_mode='html') # P
                             os.unlink(f'my_audios/{file_audio}')
                         else:
-                            os.unlink(f'my_audios/{file_audio}')
+                            os.unlink(f'my_audios/{file_audio}')  
+
+                    # for file_audio in os.listdir('my_audios'):
+                    #     # FOR FILE IN MY FOLDER FILES IF NOT .OGG REMOVE FILE
+                    #     if file_audio[-4:] == '.ogg':
+                    #         #FLOTA_INSPECTORIA_ID = -606469599
+                    #         #FLOTA_INSPECTORIA_ID = -606469599
+                            
+                    #         GRUPO_INSPECTORIA_SE_ID = -1001450279157
+                    #         await client.send_file(GRUPO_INSPECTORIA_SE_ID, 
+                    #             f'my_audios/{file_audio}', 
+                    #             thumb='logopn.jpg',
+                    #             voice_note=True,
+                    #             caption=f'P.N. {file_audio[:11]}',
+                    #             audio=True) # P
+                    #         os.unlink(f'my_audios/{file_audio}')
+                    #     else:
+                    #         os.unlink(f'my_audios/{file_audio}')
         finally:
             client.disconnect()
         with client:
