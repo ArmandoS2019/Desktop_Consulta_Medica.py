@@ -1,0 +1,41 @@
+#* ------------DATA FOR CONNECT TO DATABASE SQL----------
+    str- ODBC Driver 17 for SQL Server
+    str- IP SERVER
+    str- DATABASE NAME
+    str- USER
+    str- PASS
+
+#------is connect TRUE, show consult dataframe------------------
+    -VIEW ALL TABLES NAMES
+        -FIELDS
+
+#------THEM select----------------------
+    str- NAME OF DB VIEW TO SEARCH DATA
+    str- NAME ORDER BY FIELD
+    str- DESC OR ASCD
+    str- num of tal 
+
+#---------Sqlite---SAVE and validate---------------------------
+    str- name of your sqlite.db
+    str- name of tables XXX PENDING 
+    field - current_date.now()
+    field - text_UNIQUE_id_for_audio | SELECT from SQL
+    field - text_for_caption_name    | SELECT from SQL
+    field - text_reference_caption_name    | SELECT from SQL
+    # CREATE IF NOT EXISTS Sqlite    
+    thumbnails = TRUE or NONE
+#---------SETTINGS AUDIO------------------------------
+    -----VIEW YOUR VOICES WINDOWS-------
+        spanish_voice_id = "Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0"
+        english_voice_id = "Voices\Tokens\TTS_MS_EN-US_DAVID_11.0"
+
+#--------------------TELEGRAM-------------------------------
+    go_to_auth = https://my.telegram.org/auth
+    put_your_phone_number = 1829333444
+    --------------------------------
+    api_id = 111000000
+    api_hash = 'XXSDSDSXXXXXSDSDSDSDSDS'
+    Please_enter_your_phone_(or_bot_token):  xxxxxxxxx
+    Please enter the code you received: xxxxxx
+
+    -- start() 

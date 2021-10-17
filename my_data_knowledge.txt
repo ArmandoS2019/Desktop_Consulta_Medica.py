@@ -1,0 +1,288 @@
+userbot: briefing_notesbot
+
+
+Use this token to access the HTTP API:
+2020198865:AAFFyifB9p998OciU7Zl0Sh1VDfHdo-4UTA
+Keep your token secure and store it safely, it can be used by anyone to control your bot.
+
+For a description of the Bot API, see this page: https://core.telegram.org/bots/api
+
+
+
+#BOTTTTTTTTT
+
+#? TODO------------TELEGRAM BOT----------
+
+# # #TODO------------THIS CODE IS FOR LOOP ALL NOTES AND CONVERT TO AUDIO----------
+# INPUT_NOTE = 0
+# INPUT_TEXT2 = 1
+
+# def my_help(update, context):
+#     button1 = InlineKeyboardButton(
+#         text='ULTICABINET',
+#         url="https://portalservicios.policianacional.gob.do/dashboard/Login.aspx?returl=%2fdashboard%2fDashboard.aspx")
+
+#     reply_markup = InlineKeyboardMarkup([[button1]])
+
+#     update.message.reply_text(text='HELLO', reply_markup=reply_markup)
+
+#     update.message.reply_text(text=f"""Hola, Bienvenido, que deseas hacer? 
+#     escriba /nota para generar una nota en audio
+#     escriba /escrita para ver en texto""")
+
+# def create_audio_notes(update, context):
+#     update.message.reply_text('Enviame el texto para enviarte un audio')
+#     return INPUT_NOTE
+
+# def create_text_notes(update, context):
+#     update.message.reply_text('Enviame el ID para enviarte el texto')
+#     return INPUT_TEXT2
+    
+
+
+# def send_audio(filename, chat):
+#     chat.send_action(
+#             action=ChatAction.UPLOAD_AUDIO,
+#             timeout=1000
+#     )
+#     chat.send_audio(
+#             audio=open(filename, 'rb'),
+#             thumb=open('my_audios\logo PN.jpg', 'rb')
+#     )
+#     #os.unlink(filename) #TODO delelte file fro PATH
+    
+# def input_text(update, context):
+#     # text = update.message.text
+# #     filename = generate_audio(text)
+#     filename = 'my_audios\S19-21-0326.ogg'
+#     chat = update.message.chat
+#     send_audio(filename, chat)
+#     print(chat)
+#     update.message.reply_text('Aqui va el audio')
+#     return ConversationHandler.END
+
+# def input_text1(update, context):
+#     text = update.message.text
+#     update.message.reply_text('Aqui el texto de la nota')
+#     return ConversationHandler.END
+
+# # bot_message='Hello'
+# # chat_id = -2020198865
+# bot_token = "2020198865:AAFFyifB9p998OciU7Zl0Sh1VDfHdo-4UTA"
+# # bot = telegram.Bot(token=bot_token)
+# # print(bot.getMe())
+
+# updater = Updater(token=bot_token, use_context=True)
+# dp = updater.dispatcher
+# # add handler
+# dp.add_handler(CommandHandler('ayuda', my_help))
+# dp.add_handler(ConversationHandler(
+#         entry_points=[
+#                 CommandHandler('nota', create_audio_notes),
+#                 CommandHandler('escrita', create_text_notes)
+#         ],
+#         states={
+#                 INPUT_NOTE:[MessageHandler(Filters.text, input_text)],
+#                 INPUT_TEXT2:[MessageHandler(Filters.text, input_text1)]
+#         },
+#         fallbacks=[]
+#         ))
+
+# updater.start_polling()
+# updater.idle()
+
+
+
+
+
+
+class GetDataDB(MakeSqlite, MakeDb):
+
+    def __init__(self):
+        self.conn = self.get_the_connection()
+
+        # my_sql_db = pd.read_csv("my_sql_db.csv")
+        # self.df_db = pd.DataFrame(my_sql_db).head(10).sort_values(by=['Fecha'], ascending=False)
+        self.get_data_from_db()
+
+    def get_data_from_db(self):
+        get_data_realDB = MakeDb()
+        self.df_db = get_data_realDB.connnect_to_db()
+        # print(repr(self.df_db))
+
+        my_list_of_id = self.get_consult_dblite()
+        # print(my_list_of_id)
+
+        name_of_file_audio = ''
+        startTime = time.time()
+        print(time.ctime())
+
+        for x in self.df_db.iloc:
+            if x.iloc[5]=='PERDIDAS HUMANAS':
+
+                name_of_file_audio = x.iloc[1] #ID
+                body_text_of_audio = x.iloc[10] #Body of text note
+                print(repr(name_of_file_audio))
+
+                if name_of_file_audio not in my_list_of_id:
+                    #THIS METHODS IS HEREDATE AND ISERT DATA TO SQLITE
+                    self.insert_data_in_dblite((name_of_file_audio,datetime.now()))
+                    
+                    #THIS save audio
+                    my_audio = MakeAudio(body_text_of_audio, name_of_file_audio)
+                    my_audio.saveAudio()
+
+                    name_of_file_audio = name_of_file_audio
+        time.sleep(5)
+
+        endTime = time.time()
+        elapsedTime = endTime - startTime
+        print("Elapsed Time = %s" % elapsedTime)
+        return name_of_file_audio
+
+
+TELEGRAM2----------------------------------------------------
+   # api_id = 8284769
+    # api_hash = 'd300c8b90caebfe786bf66703cefdf81'
+    # bot_token = '2020198865:AAFFyifB9p998OciU7Zl0Sh1VDfHdo-4UTA'    
+    # phone = '18293871165'
+    # username = 'ArM- S'
+    # channel_invite_link = 'https://t.me/joinchat/GDPs3Jfw3mE0NTMx'
+
+
+    # client = TelegramClient('anon', api_id, api_hash)
+
+    # async def main():
+    #     # Getting information about yourself
+    #     me = await client.get_me()
+
+    #     # "me" is a user object. You can pretty-print
+    #     # any Telegram object with the "stringify" method:
+    #     print(me.stringify())
+
+    #     # When you print something, you see a representation of it.
+    #     # You can access all attributes of Telegram objects with
+    #     # the dot operator. For example, to get the username:
+    #     # username = me.username
+    #     # print(username)
+    #     # print(me.phone)
+
+    #     # You can print all the dialogs/conversations that you are part of:
+    #     # async for dialog in client.iter_dialogs():
+    #     #     print(dialog.name, 'has ID', dialog.id)
+
+    #     # You can send messages to yourself...
+    #     await client.send_message('me', 'Hello, myself!')
+    #     # ...to some chat ID
+    #     await client.send_message(-1001450279157, 'Hello, group!')
+    #     await client.send_file(-1001450279157, 
+    #                             'my_audios/S19-21-0865.ogg', 
+    #                             voice_note=True,
+    #                             thumb='my_images/logo PN.jpg',
+    #                             caption=f"CAPTION tipo de novedad{datetime.now()})",
+    #                             silent=False)
+
+    # with client:
+    #     client.loop.run_until_complete(main())
+
+
+
+class CreateTelegram(GetDataDB):
+
+    def __init__(self):
+
+
+        self.INPUT_NOTE = 0
+        self.INPUT_TEXT2 = 1
+
+        # chat_id = -2020198865
+        # chat_group_id = -593909848
+        bot_token = "2020198865:AAFFyifB9p998OciU7Zl0Sh1VDfHdo-4UTA"
+        # bot = telegram.Bot(token=bot_token)
+        # print(bot.getMe())
+
+        updater = Updater(token=bot_token, use_context=True)
+        dp = updater.dispatcher
+        # add handler
+        dp.add_handler(CommandHandler('ayuda', self.my_help))
+        dp.add_handler(ConversationHandler(
+                entry_points=[
+                        CommandHandler('nota', self.create_audio_notes)
+                ],
+                states={
+                        self.INPUT_NOTE:[MessageHandler(Filters.text, self.input_text)]
+                },
+                fallbacks=[]
+                ))
+
+
+        updater.start_polling()
+        updater.idle()
+
+    def my_help(self, update, context):
+        button1 = InlineKeyboardButton(
+            text='ULTICABINET',
+            url="https://portalservicios.policianacional.gob.do/dashboard/Login.aspx?returl=%2fdashboard%2fDashboard.aspx")
+
+        reply_markup = InlineKeyboardMarkup([[button1]])
+
+        update.message.reply_text(text='HELLO', reply_markup=reply_markup)
+
+        update.message.reply_text(text=f"""Hola, Bienvenido, que deseas hacer? 
+        escriba /nota para generar una nota en audio""")
+
+
+    def create_audio_notes(self, update, context):
+        # update.message.reply_text('Enviame el texto para enviarte un audio')
+        return self.INPUT_NOTE
+
+
+    def input_text(self, update, context):
+        chat = update.message.chat
+        try: 
+            while True:
+                save_audio_and_return_name_file = GetDataDB()
+                # save_audio_and_return_name_file.get_data_from_db()
+
+                t1 = threading.Thread(target=save_audio_and_return_name_file.get_data_from_db)
+                t1.start()
+                t1.join()
+          
+                for file_audio in os.listdir('my_audios'):
+                    # print(file_audio)
+                    # self.send_audio(f"my_audios/{file_audio}", chat)
+                    t2 = threading.Thread(target=self.send_audio(f"my_audios/{file_audio}", chat))
+                    t2.start()
+                    t2.join()
+                # for file_audio in os.listdir('my_audios'):
+                #     print(file_audio)
+                #     self.send_audio(f"my_audios/{file_audio}", chat)
+
+            # time.sleep(10)
+            # print(chat)
+            # update.message.reply_text(f'Aqui {my_files_names}')
+            return ConversationHandler.END
+        except telegram.error.NetworkError:
+            'Error NETWORK'
+        # except telegram.error.TelegramError:
+        #     time.sleep(10)
+        # except telegram.error.Unauthorized:
+        #     self.update_id += 1
+        
+    def send_audio(self,filename, chat):
+        chat.send_action(
+                action=ChatAction.UPLOAD_AUDIO,
+                timeout=5000
+        )
+        chat.send_audio(
+                audio=open(filename, 'rb'),
+                caption=f'P.N. {filename[10:21]}'
+        )
+        os.unlink(filename) #TODO delelte file fro PATH
+        
+
+    def input_text1(update, context):
+        text = update.message.text
+        update.message.reply_text('Aqui el texto de la nota')
+        return ConversationHandler.END
+
